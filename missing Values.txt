@@ -1,0 +1,40 @@
+import seaborn as sns
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = sns.load_dataset('titanic')
+
+print("Initial DataFrame Info:")
+df.info()
+
+
+print("\nNull Values: \n",df.isnull().sum())
+
+
+print("\nInitial DataFrame Head:")
+print(df.head())
+
+
+# Handle missing values
+# Option 1: Drop rows with any missing values
+df_dropped = df.dropna()
+
+# Option 2: Fill missing values with a specific value or method (e.g., mean, median, mode)
+df['deck'] = df['deck'].cat.add_categories('Unknown')
+df_filled = df.fillna({
+    'age': df['age'].mean(),         # Fill missing 'age' with mean value
+    'embarked': df['embarked'].mode()[0],  # Fill missing 'embarked' with mode value
+    'deck': 'Unknown',               # Fill missing 'deck' with 'Unknown'
+    'embark_town': 'Unknown',        # Fill missing 'embark_town' with 'Unknown'
+    'fare': df['fare'].median(),     # Fill missing 'fare' with median value
+})
+
+
+print("\nDataFrame Info after Dropping Missing Values:")
+df_dropped.info()
+
+
+print("\nDataFrame Info after Filling Missing Values:")
+df_filled.info()
+
+

@@ -1,0 +1,18 @@
+import numpy as np
+import pandas as pd
+
+data = pd.read_csv("Iris.csv")
+
+data.head()
+
+data.info()
+
+df = data.drop(columns=['Id'])
+
+df.median(numeric_only=True)
+
+df.mode(numeric_only=True).iloc[:1]
+
+df.std(numeric_only=True)
+
+df.var(numeric_only=True)

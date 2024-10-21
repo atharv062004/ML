@@ -1,0 +1,64 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+from sklearn import metrics
+
+iris = load_iris()
+iris_df = sns.load_dataset("iris")
+
+iris_df.head()
+
+iris_df.isnull().sum()
+
+iris_df.describe()
+
+iris_df['species'].unique()
+
+print("Setosa : ")
+iris_df[iris_df['species']  == 'setosa'].describe()
+
+
+print("Versicolor : ")
+iris_df[iris_df['species']  == 'versicolor'].describe()
+
+print("Virginica : ")
+iris_df[iris_df['species']  == 'virginica'].describe()
+
+X = iris_df.drop(columns='species')
+y = iris_df['species']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=9)
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+knn_model = KNeighborsClassifier(n_neighbors=5)
+knn_model.fit(X_train_scaled, y_train)
+
+y_pred = knn_model.predict(X_test_scaled)
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+knn_model.score(X_test_scaled, y_test)
+
+comparision = pd.DataFrame({'Predicted':y_pred, 'Actual':y_test})
+comparision
+
+confusion_matrix = metrics.confusion_matrix(y_test, y_pred)
+confusion_matrix
+
+species_names = iris_df['species'].unique()
+plt.figure(figsize=(8, 6))
+sns.heatmap(confusion_matrix, annot=True, xticklabels=species_names, yticklabels=species_names)
+plt.xlabel('Actual')
+plt.ylabel('Predicted')
+plt.title('Confusion Matrix')
+plt.show()
+
+

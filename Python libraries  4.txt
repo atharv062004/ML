@@ -1,0 +1,68 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sb
+
+df = pd.read_csv("auto-mpg.csv")
+df.head()
+
+df.info()
+
+
+df.describe()
+
+
+df = df.drop(['car name', 'horsepower'], axis=1)
+df
+
+
+model_year_count = df['model year'].drop_duplicates().count()
+origin_count = df['origin'].drop_duplicates().count()
+model_year_count, origin_count
+
+grpby_model_year = df.groupby('model year').count()
+grpby_model_year
+
+
+plt.figure(figsize=(6,6))
+plt.hist(grpby_model_year)
+plt.show()
+
+>>>
+def plot_hist(data, features):
+    len_features = len(features)
+    plt.figure(figsize=(10,8))
+    for i, feature in enumerate(features):
+        plt.subplot(2, 2, i+1)
+        plt.hist(data = df, x = feature, bins = 20, color = 'grey', edgecolor = 'white')
+        plt.title(f"Histplot of {feature}")
+        plt.xlabel(feature)
+        plt.ylabel("frequency")
+    plt.tight_layout()
+    plt.show()
+
+features = ['displacement', 'weight', 'acceleration', 'mpg']
+plot_hist(df, features)
+
+
+
+>>>
+sb.pairplot(df)
+plt.show()
+
+
+plt.figure(figsize=(10,10))
+sb.scatterplot(x='weight', y='displacement', hue='origin', data=df)
+plt.title('Scatter Plot of Weight vs Displacement by Origin')
+plt.xlabel('weight')
+plt.ylabel('displacement')
+plt.show()
+
+corr = df.corr()
+corr
+
+sb.heatmap(corr)
+plt.plot()
+
+
+
+

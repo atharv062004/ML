@@ -1,0 +1,53 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+import scipy.stats as stats
+import statistics
+import math
+import sys
+
+tips = sns.load_dataset('tips')
+
+tips.info()
+
+
+tips.head()
+
+total_bill_mean = statistics.mean(tips['total_bill'])
+total_bill_median = statistics.median(tips['total_bill'])
+total_bill_std_dev = statistics.stdev(tips['total_bill'])
+print(f"Mean total bill: {total_bill_mean:.2f}")
+print(f"Median total bill: {total_bill_median:.2f}")
+print(f"Standard deviation of total bill: {total_bill_std_dev:.2f}")
+
+num = int(input("Enter a no. to find its square-root: "))
+sqr = math.sqrt(num)
+print(f"Square root of {num}: {sqr}")
+
+tips['total_bill_squared'] = np.square(tips['total_bill'])
+print("First 5 entries of total bill squared:")
+print(tips['total_bill_squared'].head())
+
+print("System information:")
+print(f"Python version: {sys.version}")
+print(f"Maximum integer size on this system: {sys.maxsize}")
+>>>
+smoker_yes = tips[tips['smoker'] == 'Yes']['total_bill']
+smoker_no = tips[tips['smoker'] == 'No']['total_bill']
+
+t_statistic, p_value = stats.ttest_ind(smoker_yes, smoker_no)
+
+print("T-statistic:", t_statistic)
+print("P-value:", p_value)
+
+alpha = 0.05
+
+if p_value < alpha:
+    print("Reject the null hypothesis. There is a significant difference between groups.")
+else:
+    print("Fail to reject the null hypothesis. There is no significant difference between groups.")
+>>
+
+sns.set(style="whitegrid")
+sns.scatterplot(x='total_bill', y='tip', data=tips)
+sns.despine()
